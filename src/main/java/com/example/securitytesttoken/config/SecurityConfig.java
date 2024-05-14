@@ -8,10 +8,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.securitytesttoken.filter.JwtRequestFilter;
+import com.example.securitytesttoken.handler.JwtAccessDenied;
+import com.example.securitytesttoken.handler.JwtAuthenticationEntryPoint;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +30,18 @@ public class SecurityConfig {
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
+    // 권한 핸들러
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new JwtAccessDenied();
+    }
+    
+    // 인증 핸들러
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return new JwtAuthenticationEntryPoint();
+    }
 	
 //	@Primary
 	@Bean
@@ -66,6 +82,9 @@ public class SecurityConfig {
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 		
 //		http.setSharedObject(DefaultWebSecurityExpressionHandler.class, createExpressionHandler(roleHierarchyA()));
+		
+		http.exceptionHandling(ex -> ex.accessDeniedHandler(accessDeniedHandler())
+									   .authenticationEntryPoint(authenticationEntryPoint()));
 		
 		return http.build();
 		
