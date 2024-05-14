@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class UserEntity {
 	
 	@EmbeddedId
-	UserEntityId id;
+	private UserEntityId id;
 	private String password;
 	private String role;
 	private Boolean apprv;
