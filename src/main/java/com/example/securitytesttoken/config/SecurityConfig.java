@@ -11,9 +11,16 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.example.securitytesttoken.filter.JwtRequestFilter;
+
+import lombok.RequiredArgsConstructor;
+
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+	
+	private final JwtRequestFilter jwtRequestFilter;
 	
 	@Bean
 	public RoleHierarchy roleHierarchyA() {
@@ -50,7 +57,7 @@ public class SecurityConfig {
 		
 		http.formLogin(login -> login.disable());
 		
-		http.addFilterBefore(null, UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 		
 		http.setSharedObject(DefaultWebSecurityExpressionHandler.class, createExpressionHandler(roleHierarchyA()));
 		
@@ -72,7 +79,7 @@ public class SecurityConfig {
 		
 		http.formLogin(login -> login.disable());
 		
-		http.addFilterBefore(null, UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 		
 		http.setSharedObject(DefaultWebSecurityExpressionHandler.class, createExpressionHandler(roleHierarchyB()));
 		
