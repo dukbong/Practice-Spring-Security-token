@@ -1,12 +1,12 @@
 package com.example.securitytesttoken.customDto;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.securitytesttoken.dto.UserDetailInfo;
-import com.example.securitytesttoken.enums.Role;
 
 public class CustomUserDetails implements UserDetails {
 	
@@ -18,8 +18,16 @@ public class CustomUserDetails implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
+		Collection<GrantedAuthority> collection = new ArrayList<>();
+		collection.add(new GrantedAuthority() {
+			
+			@Override
+			public String getAuthority() {
+				return userDetailInfo.getRole();
+			}
+			
+		});
+		return collection;
 	}
 
 	@Override
@@ -36,10 +44,6 @@ public class CustomUserDetails implements UserDetails {
 		return userDetailInfo.getAccessUrl();
 	}
 	
-	public Role getRole() {
-		return userDetailInfo.getRole();
-	}
-
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;

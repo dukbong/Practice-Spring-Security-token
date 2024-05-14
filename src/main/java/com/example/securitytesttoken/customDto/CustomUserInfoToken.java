@@ -12,4 +12,8 @@ public class CustomUserInfoToken extends UsernamePasswordAuthenticationToken{
 		super(principal, credentials, authorities);
 	}
 
+	public CustomUserInfoToken(Object principal, Object credentials) {
+		super(principal, credentials);
+	}
+
 }

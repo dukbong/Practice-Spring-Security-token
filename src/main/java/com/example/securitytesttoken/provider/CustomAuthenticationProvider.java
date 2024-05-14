@@ -26,20 +26,21 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		String username = authentication.getName();
 		String password = (String) authentication.getCredentials();
+		@SuppressWarnings("unchecked")
 		Map<String, String> info = (Map<String, String>)authentication.getDetails();
 		
-		UserDetails details = CustomUserDetailsServiceImpl.loadUserByUsernameAndAccessUrl(username, info.get("url"));
+		UserDetails detail = CustomUserDetailsServiceImpl.loadUserByUsernameAndAccessUrl(username, info.get("url"));
 		
-		if(!bCryptPasswordEncoder.matches(password, details.getPassword())) {
+		if(!bCryptPasswordEncoder.matches(password, detail.getPassword())) {
 			throw new BadCredentialsException("비밀번호가 틀렸습니다."); 
 		}
 		
-		return new CustomUserInfoToken(details, password, details.getAuthorities());
+		return new CustomUserInfoToken(detail, password, detail.getAuthorities());
 	}
 
 	@Override
 	public boolean supports(Class<?> authentication) {
-		return false;
+		return CustomUserInfoToken.class.isAssignableFrom(authentication);
 	}
 
 }

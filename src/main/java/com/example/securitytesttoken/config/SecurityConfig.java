@@ -4,17 +4,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.securitytesttoken.filter.JwtRequestFilter;
-import com.example.securitytesttoken.provider.CustomAuthenticationProvider;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,39 +21,37 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 	
 	private final JwtRequestFilter jwtRequestFilter;
-	private final CustomAuthenticationProvider customAuthenticationProvider;
-	
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                   .authenticationProvider(customAuthenticationProvider)
-                   .build();
-    }
 	
 	@Bean
-	public RoleHierarchy roleHierarchyA() {
-		RoleHierarchyImpl roleHierarchyImpl = new RoleHierarchyImpl();
-		roleHierarchyImpl.setHierarchy("ROLE_AUSER > ROLE_AMANAGER > ROLE_AADMIN");
-		return roleHierarchyImpl;
-	}
-	@Bean
-	public RoleHierarchy roleHierarchyB() {
-		RoleHierarchyImpl roleHierarchyImpl = new RoleHierarchyImpl();
-		roleHierarchyImpl.setHierarchy("ROLE_BUSER > ROLE_BMANAGER > ROLE_BADMIN");
-		return roleHierarchyImpl;
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 	
-    private DefaultWebSecurityExpressionHandler createExpressionHandler(RoleHierarchy roleHierarchy) {
-        DefaultWebSecurityExpressionHandler expressionHandler = new DefaultWebSecurityExpressionHandler();
-        expressionHandler.setRoleHierarchy(roleHierarchy);
-        return expressionHandler;
-    }
+//	@Primary
+	@Bean
+	public RoleHierarchy roleHierarchy() {
+		RoleHierarchyImpl roleHierarchyImpl = new RoleHierarchyImpl();
+		roleHierarchyImpl.setHierarchy("ROLE_AADMIN > ROLE_AMANAGER > ROLE_AUSER");
+		return roleHierarchyImpl;
+	}
+//	@Bean
+//	public RoleHierarchy roleHierarchyB() {
+//		RoleHierarchyImpl roleHierarchyImplB = new RoleHierarchyImpl();
+//		roleHierarchyImplB.setHierarchy("ROLE_BUSER > ROLE_BMANAGER > ROLE_BADMIN");
+//		return roleHierarchyImplB;
+//	}
+	
+//    private DefaultWebSecurityExpressionHandler createExpressionHandler(RoleHierarchy roleHierarchy) {
+//        DefaultWebSecurityExpressionHandler expressionHandler = new DefaultWebSecurityExpressionHandler();
+//        expressionHandler.setRoleHierarchy(roleHierarchy);
+//        return expressionHandler;
+//    }
 	
 	@Bean
 	public SecurityFilterChain filterChainA(HttpSecurity http) throws Exception {
 		
-		http.securityMatcher("/api/a/**")
-			.authorizeHttpRequests(auth -> {auth.requestMatchers("/", "/login", "/join").permitAll();
+		http
+			.authorizeHttpRequests(auth -> {auth.requestMatchers("/main", "/login", "/join").permitAll();
 											auth.requestMatchers("/manager/**").hasRole("AMANAGER");
 											auth.requestMatchers("/admin/**").hasRole("AADMIN");
 											auth.anyRequest().authenticated();});
@@ -70,32 +65,31 @@ public class SecurityConfig {
 		
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 		
-		http.setSharedObject(DefaultWebSecurityExpressionHandler.class, createExpressionHandler(roleHierarchyA()));
+//		http.setSharedObject(DefaultWebSecurityExpressionHandler.class, createExpressionHandler(roleHierarchyA()));
 		
 		return http.build();
 		
 	}
 	
-	@Bean
-	public SecurityFilterChain filterChainB(HttpSecurity http) throws Exception {
-		
-		http.securityMatcher("/api/b/**")
-			.authorizeHttpRequests(auth -> {auth.requestMatchers("/", "/login", "/join").permitAll();
-											auth.requestMatchers("/manager/**").hasAnyRole("BMANAGER");
-											auth.requestMatchers("/admin/**").hasRole("BADMIN");
-											auth.anyRequest().authenticated();});
-		
-		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-		http.csrf(csrf -> csrf.disable());
-		
-		http.formLogin(login -> login.disable());
-		
-		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-		
-		http.setSharedObject(DefaultWebSecurityExpressionHandler.class, createExpressionHandler(roleHierarchyB()));
-		
-		return http.build();
-		
-	}
+//	@Bean
+//	public SecurityFilterChain filterChainB(HttpSecurity http) throws Exception {
+//		
+//			.authorizeHttpRequests(auth -> {auth.requestMatchers("/api/b/", "/api/b/login", "/api/b/join").permitAll();
+//											auth.requestMatchers("/api/b/manager/**").hasAnyRole("BMANAGER");
+//											auth.requestMatchers("/api/b/admin/**").hasRole("BADMIN");
+//											auth.anyRequest().authenticated();});
+//		
+//		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+//		http.csrf(csrf -> csrf.disable());
+//		
+//		http.formLogin(login -> login.disable());
+//		
+//		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+//		
+//		http.setSharedObject(DefaultWebSecurityExpressionHandler.class, createExpressionHandler(roleHierarchyB()));
+//		
+//		return http.build();
+//		
+//	}
 	
 }
