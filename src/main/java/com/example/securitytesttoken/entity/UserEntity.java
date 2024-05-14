@@ -16,12 +16,18 @@ public class UserEntity {
 	UserEntityId id;
 	private String password;
 	private String role;
+	private Boolean apprv;
 	
 	@Builder
-	public UserEntity(UserEntityId id, String password, String role) {
+	public UserEntity(UserEntityId id, String password, String role, Boolean apprv) {
 		this.id = id;
 		this.password = password;
 		this.role = role;
+		this.apprv = apprv;
+	}
+
+	public void joinApprv() {
+		this.apprv = true;
 	}
 	
 }

@@ -10,13 +10,15 @@ public class UserDetailInfo {
 	private String accessUrl;
 	private String password;
 	private String role;
+	private Boolean apprv;
 	
 	@Builder
-	public UserDetailInfo(String username, String accessUrl, String password, String role) {
+	public UserDetailInfo(String username, String accessUrl, String password, String role, Boolean apprv) {
 		this.username = username;
 		this.accessUrl = accessUrl;
 		this.password = password;
 		this.role = role;
+		this.apprv = apprv;
 	}
 	
 }

@@ -11,4 +11,5 @@ public interface UserEntityRepository extends JpaRepository<UserEntity, UserEnti
 	
 	Optional<UserEntity> findById_UsernameAndId_accessUrl(String username, String accessUrl);
 	
+	boolean  existsById_UsernameAndId_AccessUrl(String username, String accessUrl);
 }

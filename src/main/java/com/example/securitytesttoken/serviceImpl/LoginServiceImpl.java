@@ -16,8 +16,10 @@ import com.example.securitytesttoken.service.LoginService;
 import com.example.securitytesttoken.util.JwtUtil;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class LoginServiceImpl implements LoginService{
 	
@@ -26,6 +28,7 @@ public class LoginServiceImpl implements LoginService{
 
 	@Override
 	public String loginProcess(String accessUrl, LoginDTO loginDTO) {
+		log.info("로그인 중..");
 		CustomUserInfoToken authToken = new CustomUserInfoToken(loginDTO.getUsername(), loginDTO.getPassword());
 		Assert.hasText(accessUrl, "URL이 비어 있을 수 없습니다.");
 		Map<String, String> map = new HashMap<>();

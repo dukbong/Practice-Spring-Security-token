@@ -44,6 +44,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		
 		if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
 			jwtToken = authorizationHeader.substring(7);
+			log.info("jwt token = {}", jwtToken);
 			claims = jwtUtil.validateToken(jwtToken);
 			Assert.notNull(claims, "클래임은 Null 일 수 없습니다.");
 			if(SecurityContextHolder.getContext().getAuthentication() == null) {

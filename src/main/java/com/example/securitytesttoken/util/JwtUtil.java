@@ -57,10 +57,9 @@ public class JwtUtil {
 			}
 			
 			// 추가적인 유효성 검사를 진행할 수 있다.
-			
 			return jwt.getAllClaims();
 		} catch (InvalidJWTException e) {
-			log.error("유횽성 검사 중 오류가 발생 : {}", e.getMessage());
+			log.error("유효성 검사 중 오류가 발생 : {}", e.getMessage());
 			return null;
 		} catch (Exception e) {
 			log.error("유효성 검사 중 오류가 발생했습니다.");
