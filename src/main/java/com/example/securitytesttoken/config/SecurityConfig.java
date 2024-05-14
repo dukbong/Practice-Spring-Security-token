@@ -67,8 +67,6 @@ public class SecurityConfig {
 											auth.requestMatchers("/admin/**").hasRole("MAIN");
 											auth.anyRequest().authenticated();});
 		
-		// STATELESS 정책은 CSRF를 비활성하기 때문에 별도로 CSRF 설정을 해주지 않아도 된다.
-		// 또한 세션 고정 공격등을 방지 할 필요가 없다.
 		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		http.csrf(csrf -> csrf.disable());
 		
