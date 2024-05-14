@@ -14,8 +14,9 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 	}
 
 	@Override
-	public UserDetails loadUserByUsernameAndAccessUrl() {
+	public UserDetails loadUserByUsernameAndAccessUrl(String username, String accessUrl) {
 		return null;
 	}
+
 
 }
