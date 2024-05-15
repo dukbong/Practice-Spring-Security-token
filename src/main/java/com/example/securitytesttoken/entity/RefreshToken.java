@@ -7,6 +7,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.AccessLevel;
@@ -24,7 +25,12 @@ public class RefreshToken {
 	private Long id;
 	
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id")
+    @JoinColumns({
+    	// referencedColumnName은 참조할 컬럼 명을 적는것이다.
+    	// name은 지금 테이블에 컬럼 이름을 정하는 것이다.
+        @JoinColumn(name = "username", referencedColumnName = "username"), 
+        @JoinColumn(name = "accessUrl", referencedColumnName = "accessUrl")
+    })
 	private UserEntity userEntity;
 	
 	private String refreshToken;
