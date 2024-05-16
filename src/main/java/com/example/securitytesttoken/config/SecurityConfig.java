@@ -92,10 +92,10 @@ public class SecurityConfig {
 	
 //	@Bean
 //	public SecurityFilterChain filterChainB(HttpSecurity http) throws Exception {
-//		
-//			.authorizeHttpRequests(auth -> {auth.requestMatchers("/api/b/", "/api/b/login", "/api/b/join").permitAll();
-//											auth.requestMatchers("/api/b/manager/**").hasAnyRole("BMANAGER");
-//											auth.requestMatchers("/api/b/admin/**").hasRole("BADMIN");
+//		http.securityMatcher("/api/b")
+//			.authorizeHttpRequests(auth -> {
+//											auth.requestMatchers("/manager/**").hasAnyRole("BMANAGER");
+//											auth.requestMatchers("/admin/**").hasRole("BADMIN");
 //											auth.anyRequest().authenticated();});
 //		
 //		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -105,10 +105,43 @@ public class SecurityConfig {
 //		
 //		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 //		
-//		http.setSharedObject(DefaultWebSecurityExpressionHandler.class, createExpressionHandler(roleHierarchyB()));
+//		return http.build();
+//		
+//	}
+//	
+//	@Bean
+//	public SecurityFilterChain filterChainC(HttpSecurity http) throws Exception {
+//		http.securityMatcher("/api/c")
+//			.authorizeHttpRequests(auth -> {
+//											auth.requestMatchers("/manager/**").hasAnyRole("BMANAGER");
+//											auth.requestMatchers("/admin/**").hasRole("BADMIN");
+//											auth.anyRequest().authenticated();});
+//		
+//		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+//		http.csrf(csrf -> csrf.disable());
+//		
+//		http.formLogin(login -> login.disable());
+//		
+//		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 //		
 //		return http.build();
 //		
+//	}
+//	
+//	@Bean
+//	public SecurityFilterChain filterChainGlobal(HttpSecurity http) throws Exception {
+//		http
+//			.authorizeHttpRequests(auth -> {auth.requestMatchers("/", "/login", "/join").permitAll();
+//											auth.anyRequest().authenticated();});
+//		
+//		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+//		http.csrf(csrf -> csrf.disable());
+//		
+//		http.formLogin(login -> login.disable());
+//		
+//		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+//		
+//		return http.build();
 //	}
 	
 }

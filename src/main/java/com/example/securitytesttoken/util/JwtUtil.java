@@ -47,7 +47,7 @@ public class JwtUtil {
 		return encodeJwt;
 	}
 	
-	public Map<String, Object> validateToken(String jwtToken) {
+	public JWT validateToken(String jwtToken) {
 		Verifier verifier = HMACVerifier.newVerifier(secret);
 		try {
 			JWT jwt = JWT.getDecoder().decode(jwtToken, verifier);
@@ -57,7 +57,8 @@ public class JwtUtil {
 			}
 			
 			// 추가적인 유효성 검사를 진행할 수 있다.
-			return jwt.getAllClaims();
+			
+			return jwt;
 		} catch (InvalidJWTException e) {
 			log.error("유효성 검사 중 오류가 발생 : {}", e.getMessage());
 			return null;

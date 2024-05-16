@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.securitytesttoken.customDto.JoinDTO;
@@ -14,6 +15,7 @@ import com.example.securitytesttoken.dto.LoginDTO;
 import com.example.securitytesttoken.service.ApprvService;
 import com.example.securitytesttoken.service.JoinService;
 import com.example.securitytesttoken.service.LoginService;
+import com.example.securitytesttoken.service.LogoutService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +24,8 @@ import lombok.RequiredArgsConstructor;
 //@RequestMapping("/api/a")
 public class MainController {
 
-	private final LoginService LoginServiceImpl;
+	private final LoginService loginServiceImpl;
+	private final LogoutService logoutServiceImpl;
 	private final JoinService JoinServiceImpl;
 	private final ApprvService apprvServiceImpl;
 	
@@ -33,7 +36,7 @@ public class MainController {
 	
 	@PostMapping("/login/{accessUrl}")
 	public ResponseEntity<String> loginP(@PathVariable("accessUrl") String accessUrl, @RequestBody LoginDTO loginDTO) {
-		String jwtToken = LoginServiceImpl.loginProcess(accessUrl, loginDTO);
+		String jwtToken = loginServiceImpl.loginProcess(accessUrl, loginDTO);
 		Assert.hasText(jwtToken, "Jwt Token 값은 비어 있을 수 없습니다.");
 		return ResponseEntity.ok().header("Authorization", "Bearer " + jwtToken).body("로그인 성공 하였습니다.");
 	}
@@ -48,6 +51,12 @@ public class MainController {
 	public ResponseEntity<String> apprvP(@PathVariable("accessUrl") String accessUrl, @PathVariable("username") String username) {
 		apprvServiceImpl.apprv(accessUrl, username);
 		return ResponseEntity.ok().body(username + "님의 회원가입을 승인하였습니다.");
+	}
+	
+	@PostMapping("/logout")
+	public ResponseEntity<String> logoutP(@RequestHeader("Authorization") String token) {
+		logoutServiceImpl.logoutProcess(token);
+		return ResponseEntity.ok().body("logout 성공");
 	}
 	
 }

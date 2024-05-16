@@ -21,14 +21,14 @@ public class BlackListToken {
 	@GeneratedValue(generator = "black_list_token_gen")
 	private Long id;
 	
-	private String blackListToken;
+	private String blackListTokenName;
 	
 	private ZonedDateTime expiredAt;
 	
 	@Builder
-	public BlackListToken(Long id, String blackListToken, ZonedDateTime expiredAt) {
+	public BlackListToken(Long id, String blackListTokenName, ZonedDateTime expiredAt) {
 		this.id = id;
-		this.blackListToken = blackListToken;
+		this.blackListTokenName = blackListTokenName;
 		this.expiredAt = expiredAt;
 	}
 	
