@@ -1,5 +1,8 @@
 package com.example.securitytesttoken.controller;
 
+import java.util.Map;
+
+import org.eclipse.angus.mail.iap.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.securitytesttoken.customDto.JoinDTO;
 import com.example.securitytesttoken.dto.LoginDTO;
 import com.example.securitytesttoken.service.ApprvService;
+import com.example.securitytesttoken.service.CpuMonitoringService;
 import com.example.securitytesttoken.service.JoinService;
 import com.example.securitytesttoken.service.LoginService;
 import com.example.securitytesttoken.service.LogoutService;
@@ -28,6 +32,7 @@ public class MainController {
 	private final LogoutService logoutServiceImpl;
 	private final JoinService JoinServiceImpl;
 	private final ApprvService apprvServiceImpl;
+	private final CpuMonitoringService cpuMonitoringServiceimpl;
 	
 	@GetMapping("/main")
 	public ResponseEntity<String> mainP() {
@@ -57,6 +62,12 @@ public class MainController {
 	public ResponseEntity<String> logoutP(@RequestHeader("Authorization") String token) {
 		logoutServiceImpl.logoutProcess(token);
 		return ResponseEntity.ok().body("logout 성공");
+	}
+	
+	@GetMapping("/cpumonitor")
+	public ResponseEntity<Map<String, Object>> cpuM() {
+		Map<String, Object> result = cpuMonitoringServiceimpl.monitoring();
+		return ResponseEntity.ok().body(result);
 	}
 	
 }
