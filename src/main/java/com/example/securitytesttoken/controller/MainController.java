@@ -64,7 +64,7 @@ public class MainController {
 		return ResponseEntity.ok().body("logout 성공");
 	}
 	
-	@GetMapping("/cpumonitor")
+	@GetMapping("/cpu/monitor")
 	public ResponseEntity<Map<String, Object>> cpuM() {
 		Map<String, Object> result = cpuMonitoringServiceimpl.monitoring();
 		return ResponseEntity.ok().body(result);

@@ -27,6 +27,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'io.fusionauth:fusionauth-jwt:5.3.2'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.springframework.kafka:spring-kafka'
 	runtimeOnly 'com.h2database:h2'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

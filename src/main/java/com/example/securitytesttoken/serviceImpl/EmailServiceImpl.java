@@ -23,12 +23,12 @@ public class EmailServiceImpl {
 	
 	private MimeMessage createMessage(String subject, String msg) throws Exception{
         MimeMessage message = javaMailSender.createMimeMessage();
-        message.addRecipients(Message.RecipientType.TO, emailAddr);
+        message.addRecipients(Message.RecipientType.TO, emailAddr); // 받을 사람 이메일 주소
         message.setSubject(subject);
         String content = "<h1>현재 접속한 사용자 정보</h1>";
         content += "<div>" + msg + "</div>";
         message.setText(content, "utf-8", "html");
-        message.setFrom(new InternetAddress(emailAddr, "Spring-Security-ADMIN"));// 보내는 사람
+        message.setFrom(new InternetAddress(emailAddr, "Spring-Security-ADMIN"));// 보내는 사람 이메일 주소 / 보내는 사람 이름[지정 가능]
         return  message;
     }
 

@@ -1,8 +1,5 @@
 package com.example.securitytesttoken.serviceImpl;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.OperatingSystemMXBean;
@@ -19,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CpuMonitoringServiceImpl implements CpuMonitoringService {
 	
-	private final int CPU_THRESHOLD = 80;
+	private final int CPU_THRESHOLD = 80; // %
 	private final int MEMORY_THRESHOLD_MB = 500; // MB
 
 	private OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
